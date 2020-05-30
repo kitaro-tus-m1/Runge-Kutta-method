@@ -11,22 +11,29 @@ program main
 
     ! 独立変数x, 従属変数yを実数として定義し，初期値を代入しておく
     real :: x = x0, y = y0
-    !real f
+    ! real f
 
-    ! done 動作確認
+    ! (done)動作確認
     !print *, x, y
+
+    ! 注意点
+    ! 内部副プログラムで定義した函数を利用する際には，containsより前で呼び出さなければならない
+    ! 内部副プログラムで函数を定義した場合，
+    ! 14行目のような "real f" といった函数のデータ型指定は必要ない
+
+    ! (done)動作確認
+    !print *, f(10.0, 8.0)
+    !print *, f(x, y)
 
     stop
 
 contains
     ! 1解微分の右辺を関数f(x,y)として定義する
-real function f(a, b)
-implicit none
-real a, b
-f = a - b
-return
-end function f
+    real function f(a, b)
+        implicit none
+        real a, b
+        f = a - b
+        return
+    end function f
 
-    print *, f(10.0 , 6.0)
-    !print *, f(x, y)
 end program main
