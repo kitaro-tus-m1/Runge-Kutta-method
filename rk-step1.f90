@@ -11,6 +11,9 @@ program main
 
     ! 独立変数x, 従属変数yを実数として定義し，初期値を代入しておく
     real :: x = x0, y = y0
+
+    integer i
+    real k1, k2, k3, k4
     ! real f
 
     ! (done)動作確認
@@ -25,8 +28,19 @@ program main
     !print *, f(10.0, 8.0)
     !print *, f(x, y)
 
+    do i = 1, 100
+        k1 = h * f(x, y)
+        k2 = h * f(x+h/2.0, y+k1/2.0)
+        k3 = h * f(x+h/2.0, y+k2/2.0)
+        k4 = h* f(x+h, y+k3)
+        x = x + h
+        y = y + (k1 + 2*k2 + 2*k3 + k4)/6.0
+        print *, x, y
+    end do
+
     stop
 
+! 以下，内部副プログラム
 contains
     ! 1解微分の右辺を関数f(x,y)として定義する
     real function f(a, b)
