@@ -28,6 +28,14 @@ program main
     !print *, f(10.0, 8.0)
     !print *, f(x, y)
 
+    ! 初期値を画面に表示
+    print *, x, y
+
+    ! 'rk-step1.dat'を開く
+    open(10, file='rk-step1.dat', status='replace')
+        ! 初期値を'rk-step1.dat'に出力
+        write(10, *) x, y
+
     do i = 1, 100
         k1 = h * f(x, y)
         k2 = h * f(x+h/2.0, y+k1/2.0)
@@ -35,8 +43,15 @@ program main
         k4 = h* f(x+h, y+k3)
         x = x + h
         y = y + (k1 + 2*k2 + 2*k3 + k4)/6.0
+        ! 計算結果を画面に表示
         print *, x, y
+
+        ! 計算結果を'rk-step1.dat'に出力
+            write(10, *) x, y
     end do
+
+    ! 'rk-step1.dat'を閉じる
+    close(10)
 
     stop
 
