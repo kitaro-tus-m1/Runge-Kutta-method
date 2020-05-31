@@ -12,7 +12,7 @@ program main
     ! t0 := t=0, x0 := x(0), y0 := y(0)
     ! 配列を使って，ベクトル表現で解くためには
     ! x(2) := (x, y), f(2) := (f, g), x0(2) := (x0, y0)とおくべき
-    double precision,parameter :: t0 = - Log(3001d0), x0 = 0.0d0, y0 = 0.68d0
+    double precision,parameter :: t0 = 0.01d0, x0 = 0.0d0, y0 = 0.68d0
     ! x0 = 0.0 は無根拠な仮定
 
     ! 刻み幅h = -0.1とする
@@ -42,7 +42,7 @@ open(10, file='rk-step3.dat', status='replace')
     write(10, '(3e17.9)') t, x
 
 ! Runge-Kutta methodの繰り返し処理を書く
-do i = 1, 20000
+do i = 1, 2000
         k1 = h * f(t, x)
         k2 = h * f(t+h/2.0, x+k1/2.0)
         k3 = h * f(t+h/2.0, x+k2/2.0)
