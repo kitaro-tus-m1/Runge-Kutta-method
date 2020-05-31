@@ -53,6 +53,33 @@ program main
     ! 'rk-step1.dat'を閉じる
     close(10)
 
+! 'rk-step1.plt'を作成してgnuplotでAqauaTermによるプロットを表示させる
+    ! 'rk-step1.plt'を開くgnuplotのスクリプトファイル
+    open(11, file='rk-step1.plt', status='replace')
+        write (11, '(a)') 'plot "rk-step1.dat"'
+        ! Returnを押すまで待機
+        !write (11, '(a)') 'pause -1'
+    ! 'rk-step1.plt'を閉じる
+    close(11)
+
+    ! gnuplotを起動し，'rk-step1.plt'を実行する
+    call execute_command_line('gnuplot "rk-step1.plt"')
+
+! 'rk-step1-save.plt'を作成してgnuplotでpng画像としてプロットを保存する
+    ! 'rk-step1-save.plt'を開くgnuplotのスクリプトファイル
+    open(12, file='rk-step1-save.plt', status='replace')
+        ! 出力先をpngに設定
+        write (12, '(a)') 'set terminal png'
+        ! 出力ファイルを'rk-step1.png'に設定
+        write (12, '(a)') 'set output "rk-step1.png"'
+        ! 'rk-step1.dat'をプロット
+        write (12, '(a)') 'plot "rk-step1.dat"'
+    ! 'rk-step1-save.plt'を閉じる
+    close(12)
+
+    ! gnuplotを起動し，'rk-step1-save.plt'を実行する
+    call execute_command_line('gnuplot "rk-step1-save.plt"')
+
     stop
 
 ! 以下，内部副プログラム
