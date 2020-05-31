@@ -22,7 +22,8 @@ program main
     ! 繰り返し処理のためのiを定義する
     integer i
     ! 函数f1とf2を区別するためのjを定義する
-    integer j
+    ! 函数を配列として定義する場合は不要
+    ! integer j
     ! Runge-Kutta method の各kを2要素配列として定義する
     real k1(2), k2(2), k3(2), k4(2)
 
@@ -47,38 +48,68 @@ program main
 open(10, file='rk-step2.dat', status='replace')
 
 ! RUnge-Kutta methodの繰り返し処理を書く
-do i = 1, 100
-    ! f1, f2のそれぞれについて処理する
-    do j = 1, 2
-        k1(j) = h * f(j, t, x)
-        k2(j) = h * f(j, t+h/2.0, x+k1(j)/2.0)
-        k3(j) = h * f(j, t+h/2.0, x+k2(j)/2.0)
-        k4(j) = h * f(j, t+h, x+k3(j))
+do i = 1, 200
+        k1 = h * f(t, x)
+        k2 = h * f(t+h/2.0, x+k1/2.0)
+        k3 = h * f(t+h/2.0, x+k2/2.0)
+        k4 = h * f(t+h, x+k3)
         t = t + h
-        x(j) = x(j) + (k1(j) + 2*k2(j) + 2*k3(j) + k4(j))/6.0
-    end do
+        x = x + (k1 + 2*k2 + 2*k3 + k4)/6.0
     ! 計算結果を画面に表示
-    print *, t, x
+    print '(3e17.9)', t, x
     ! 計算結果を'rk-step2.dat'に出力
-    write(10, *) t, x
+    write(10, '(3e17.9)') t, x
 end do
 ! 'rk-step2.dat'を閉じる
 close(10)
+
+! 'rk-step2.plt'を作成してgnuplotでAqauaTermによるプロットを表示させる
+! 'rk-step2.plt'を開く
+open(11, file='rk-step2.plt', status='replace')
+    write (11, '(a)') 'plot "rk-step2.dat" using 1:2 w l'
+    write (11, '(a)') 'replot "rk-step2.dat" using 1:3 w l'
+! 'rk-step2.plt'を閉じる
+close(11)
+
+! gnuplotを起動し，'rk-step1.plt'を実行する
+call execute_command_line('gnuplot "rk-step2.plt"')
+
+
+! 'rk-step1-save.plt'を作成してgnuplotでpng画像としてプロットを保存する
+! 'rk-step1-save.plt'を開く
+open(12, file='rk-step2-save.plt', status='replace')
+    ! 出力先をpngに設定
+    write (12, '(a)') 'set terminal png'
+    ! 出力ファイルを'rk-step1.png'に設定
+    write (12, '(a)') 'set output "rk-step2.png"'
+    ! 'rk-step2.dat'をプロット
+    write (12, '(a)') 'plot "rk-step2.dat" using 1:2 w l'
+    ! グラフを重ねるため再度，出力ファイルを'rk-step2.png'に設定
+    write (12, '(a)') 'set output "rk-step2.png"'
+    ! 1列目(t)と3列目(x(2))を使ってグラフを描く
+    write (12, '(a)') 'replot "rk-step2.dat" using 1:3 w l'
+! 'rk-step1-save.plt'を閉じる
+close(12)
+
+! gnuplotを起動し，'rk-step1-save.plt'を実行する
+call execute_command_line('gnuplot "rk-step2-save.plt"')
 
 stop
 
 ! 以下，内部副プログラム
 contains
     ! 1解微分の右辺を関数f(j,t,x(1),x(2)) in { f1(t,x(1),x(2)), f2(t,x(1),x(2)) }として定義する
-    real function f(j, t, x)
+    ! 2つの函数を2成分をもつ1つの配列として定義できるかやってみる
+    function f(t, x)
         implicit none
+        real f(2)
         real t, x(2)
-        integer j
-        if (j .eq. 1) then
-            f = x(1) - 2 * x(1) * x(2)
-        else if (j .eq. 2) then
-            f = -x(2) + 3 * x(1) * x(2)
-        end if
+        !integer j
+        !if (j .eq. 1) then
+            f(1) = x(1) - 2 * x(1) * x(2)
+        !else if (j .eq. 2) then
+            f(2) = -x(2) + 3 * x(1) * x(2)
+        !end if
         return
     end function f
 
