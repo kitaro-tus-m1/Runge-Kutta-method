@@ -7,7 +7,6 @@ program main
     ! 境界条件は y(-Ln(3001)) = 1 - 2 x(-Ln(3001))
     ! x(0)がunknownなので，x(0)を色々と仮定して解いてみる
     ! その試行の中で，境界条件を満たすものが現れたら，それが解であるとみなす
-    ! t = -Ln(3001) が計算結果の出力ファイルの何行目にあるかを把握しなければならない
 
     ! t0 := t=0, x0 := x(0), y0 := y(0)
     ! 配列を使って，ベクトル表現で解くためには
@@ -58,78 +57,33 @@ end do
 ! 'rk-step3.dat'を閉じる
 close(10)
 
-! 'rk-step3.plt'を作成してgnuplotでAqauaTermによるプロットを表示させる
+! 'rk-step3.plt'を作成してgnuplotでAqauaTermによるプロットを画面に表示させる
 ! 'rk-step3.plt'を開く
 open(11, file='rk-step3.plt', status='replace')
-    write (11, '(a)') 'set logscale x'
-    write (11, '(a)') 'set format x "10^{%L}"'
-    write (11, '(a)') 'set ytics 0.1'
-    write (11, '(a)') 'set mytics 4'
-    write (11, '(a)') 'set xrange [0.1:1000000]'
-    write (11, '(a)') 'set yrange [-0.05:1.05]'
-    write (11, '(a)') 'set xlabel "1+z (= Exp(-N))"'
-    write (11, '(a)') 'set ylabel "Omega"'
-    write (11, '(a)') 'set key outside'
-    write (11, '(a)') 'set key box'
-    !write (11, '(a)') 'set key box width -6'
-    write (11, '(a)') 'set size square'
-    !write (11, '(a)') 'show size'
-    write (11, '(a)') 'plot "rk-step3.dat" using 1:2 w l title "Omega_r"'
-    write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l title "Omega_{\lambda}"'
-    write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l title "Omega_m"'
-    ! write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead'
-    write (11, '(a)') 'set parametric'
-    write (11, '(a)') 'set trange [-0.05:1.05]'
-    write (11, '(a)') 'c1 = 1.0'
-    write (11, '(a)') 'c2 = 3001.0'
-    write (11, '(a)') 'c3 = 0.68'
-    write (11, '(a)') 'replot c1, t title "z = 0"'
-    write (11, '(a)') 'replot c2, t title "z = 3000" '
-    write (11, '(a)') 'replot t, c3 title "Omega = 0.68"'
-    ! write (11, '(a)') 'unset parametric'
+    ! 内部subroutine 'set_gnuplot_options' を呼び出しgnuplotの設定をする
+    call set_gnuplot_options
+    ! 内部subroutine 'gnuplot_plot_screen' を呼び出し，グラフを画面に表示する
+    call gnuplot_plot_screen
 ! 'rk-step3.plt'を閉じる
 close(11)
 
-! gnuplotを起動し，'rk-step1.plt'を実行する
+! gnuplotを起動し，'rk-step3.plt'を実行する
 call execute_command_line('gnuplot "rk-step3.plt"')
 
 
-! 'rk-step3-save.plt'を作成してgnuplotでpng画像としてプロットを保存する
+! 'rk-step3-save.plt'を作成してgnuplotでeps画像としてプロットを保存する
 ! 'rk-step3-save.plt'を開く
 open(11, file='rk-step3-save.plt', status='replace')
-    ! 出力先をpngに設定
+    ! 出力先をeps(color)に設定
     write (11, '(a)') 'set terminal postscript enhanced color'
-    ! 出力ファイルを'rk-step1.png'に設定
+    ! 出力ファイルを'rk-step3.eps'に設定
     write (11, '(a)') 'set output "rk-step3.eps'
-    ! 横軸を対数軸に設定
-    write (11, '(a)') 'set logscale x'
-    write (11, '(a)') 'set format x "10^{%L}"'
-    write (11, '(a)') 'set ytics 0.1'
-    write (11, '(a)') 'set mytics 4'
-    write (11, '(a)') 'set xrange [0.1:1000000]'
-    write (11, '(a)') 'set yrange [-0.05:1.05]'
-    write (11, '(a)') 'set xlabel "1+z (= Exp(-N))"'
-    write (11, '(a)') 'set ylabel "Omega"'
-    ! 'rk-step3.dat'をプロット
-    write (11, '(a)') 'plot "rk-step3.dat" using 1:2 w l'
-    ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
-    write (11, '(a)') 'set output "rk-step3.eps"'
-    ! 1列目(1+z)と3列目(x(2))を使ってグラフを描く
-    write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l'
-    ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
-    write (11, '(a)') 'set output "rk-step3.eps"'
-    ! 1列目(1+z)と4列目(Omega_m)を使ってグラフを描く
-    write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
-    write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead'
-    write (11, '(a)') 'set parametric'
-    write (11, '(a)') 'set trange [-0.05:1.05]'
-    write (11, '(a)') 'c1 = 1'
-    write (11, '(a)') 'c2 = 3001'
-    ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
-    write (11, '(a)') 'set output "rk-step3.eps"'
-    write (11, '(a)') 'replot c1, t'
-    write (11, '(a)') 'set output "rk-step3.eps"'
-    write (11, '(a)') 'replot c2, t'
+
+    ! gnuplotの設定
+    call set_gnuplot_options
+    ! 内部subroutine 'gnuplot_plot_output' を呼び出し，グラフをepsに出力保存する
+    call gnuplot_plot_eps
+
 ! 'rk-step3-1save.plt'を閉じる
 close(11)
 
@@ -150,5 +104,58 @@ contains
         return
     end function f
 
+    ! gnuplotの設定を行う内部subroutine
+    subroutine set_gnuplot_options
+        write (11, '(a)') 'set logscale x'
+        write (11, '(a)') 'set format x "10^{%L}"'
+        write (11, '(a)') 'set ytics 0.1'
+        write (11, '(a)') 'set mytics 4'
+        write (11, '(a)') 'set xrange [0.1:1000000]'
+        write (11, '(a)') 'set yrange [-0.05:1.05]'
+        write (11, '(a)') 'set xlabel "1+z (= Exp(-N))"'
+        write (11, '(a)') 'set ylabel "Omega"'
+        write (11, '(a)') 'set key outside'
+        write (11, '(a)') 'set key box'
+        write (11, '(a)') 'set size square'
+    end subroutine
 
+    ! plotを画面に表示するための内部subroutine
+    subroutine gnuplot_plot_screen
+        write (11, '(a)') 'set parametric'
+        write (11, '(a)') 'set trange [-0.05:1.05]'
+        write (11, '(a)') 'c1 = 1.0'
+        write (11, '(a)') 'c2 = 3001.0'
+        write (11, '(a)') 'c3 = 0.68'
+        write (11, '(a)') 'plot c1, t title "z = 0"'
+        write (11, '(a)') 'replot c2, t title "z = 3000" '
+        write (11, '(a)') 'replot t, c3 title "Omega = 0.68"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l title "Omega_r"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l title "Omega_{\lambda}"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l title "Omega_m"'
+    end subroutine
+
+    ! plotをepsに保存するための内部subroutine
+    subroutine gnuplot_plot_eps
+        write (11, '(a)') 'set parametric'
+        write (11, '(a)') 'set trange [-0.05:1.05]'
+        write (11, '(a)') 'c1 = 1.0'
+        write (11, '(a)') 'c2 = 3001.0'
+        write (11, '(a)') 'c3 = 0.68'
+        write (11, '(a)') 'plot c1, t title "z = 0"'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
+        write (11, '(a)') 'set output "rk-step3.eps"'
+        write (11, '(a)') 'replot c2, t title "z = 3000"'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
+        write (11, '(a)') 'set output "rk-step3.eps"'
+        write (11, '(a)') 'replot t, c3 title "Omega = 0.68"'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
+        write (11, '(a)') 'set output "rk-step3.eps"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l title "Omega_r"'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
+        write (11, '(a)') 'set output "rk-step3.eps"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l title "Omega_{\lambda}"'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
+        write (11, '(a)') 'set output "rk-step3.eps"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l title "Omega_m"'
+    end subroutine
 end program main
