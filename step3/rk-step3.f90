@@ -12,8 +12,9 @@ program main
     ! t0 := t=0, x0 := x(0), y0 := y(0)
     ! 配列を使って，ベクトル表現で解くためには
     ! x(2) := (x, y), f(2) := (f, g), x0(2) := (x0, y0)とおくべき
-    double precision,parameter :: t0 = -Log(3001d0), x0 = 0.3d0, y0 = 1d0 - 0.6d0
-    ! x0 = 0.0 は無根拠な仮定
+    ! 1+z = 0.1 から計算を始めるためにt0は次のようにした
+    double precision,parameter :: t0 = -Log(0.10d0), x0 = 0.000000015d0, y0 = 0.99955d0
+    ! x0, y0 を色々と調節した
 
     ! 刻み幅h = -0.1とする
     double precision, parameter :: h = -0.1d0
@@ -34,15 +35,15 @@ program main
     double precision k1(2), k2(2), k3(2), k4(2)
 
     ! 初期値を画面に表示
-    print *, Exp(-t), x
+    print *, Exp(-t), x, 1.0d0 - x(1) - x(2)
 
 ! 'rk-step3.dat'を開く
 open(10, file='rk-step3.dat', status='replace')
     ! 初期値を'rk-step3.dat'に出力
-    write(10, '(3e17.9)') Exp(-t), x
+    write(10, '(3e17.9)') Exp(-t), x, 1.0d0 - x(1) - x(2)
 
 ! Runge-Kutta methodの繰り返し処理を書く
-do i = 1, 100
+do i = 1, 180
         k1 = h * f(t, x)
         k2 = h * f(t+h/2.0, x+k1/2.0)
         k3 = h * f(t+h/2.0, x+k2/2.0)
@@ -50,9 +51,9 @@ do i = 1, 100
         t = t + h
         x = x + (k1 + 2*k2 + 2*k3 + k4)/6.0
     ! 計算結果を画面に表示
-    print '(3e17.9)', Exp(-t), x
+    print '(4e17.9)', Exp(-t), x, 1.0d0 - x(1) - x(2)
     ! 計算結果を'rk-step3.dat'に出力
-    write(10, '(3e17.9)') Exp(-t), x
+    write(10, '(4e17.9)') Exp(-t), x, 1.0d0 - x(1) - x(2)
 end do
 ! 'rk-step3.dat'を閉じる
 close(10)
@@ -61,10 +62,19 @@ close(10)
 ! 'rk-step3.plt'を開く
 open(11, file='rk-step3.plt', status='replace')
     write (11, '(a)') 'set logscale x'
-    write (11, '(a)') 'set xlabel "1+z (= Exp(N))"'
+    write (11, '(a)') 'set xrange [0.1:1000000]'
+    write (11, '(a)') 'set yrange [-0.05:1.05]'
+    write (11, '(a)') 'set xlabel "1+z (= Exp(-N))"'
     write (11, '(a)') 'set ylabel "Omega"'
-    write (11, '(a)') 'plot "rk-step3.dat" using 1:2'
-    write (11, '(a)') 'replot "rk-step3.dat" using 1:3'
+    write (11, '(a)') 'plot "rk-step3.dat" using 1:2 w l'
+    write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l'
+    write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
+    write (11, '(a)') 'set parametric'
+    write (11, '(a)') 'set trange [-0.05:1.05]'
+    write (11, '(a)') 'c1 = 1'
+    write (11, '(a)') 'c2 = 3001'
+    write (11, '(a)') 'replot c1, t'
+    write (11, '(a)') 'replot c2, t'
 ! 'rk-step3.plt'を閉じる
 close(11)
 
@@ -81,14 +91,26 @@ open(12, file='rk-step3-save.plt', status='replace')
     write (12, '(a)') 'set output "rk-step3.png"'
     ! 横軸を対数軸に設定
     write (12, '(a)') 'set logscale x'
+    write (12, '(a)') 'set xrange [0.1:1000000]'
+    write (12, '(a)') 'set yrange [-0.05:1.05]'
     write (12, '(a)') 'set xlabel "1+z (= Exp(-N))"'
     write (12, '(a)') 'set ylabel "Omega"'
     ! 'rk-step3.dat'をプロット
     write (12, '(a)') 'plot "rk-step3.dat" using 1:2 w l'
     ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
     write (12, '(a)') 'set output "rk-step3.png"'
-    ! 1列目(t)と3列目(x(2))を使ってグラフを描く
+    ! 1列目(1+z)と3列目(x(2))を使ってグラフを描く
     write (12, '(a)') 'replot "rk-step3.dat" using 1:3 w l'
+    ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
+    write (12, '(a)') 'set output "rk-step3.png"'
+    ! 1列目(1+z)と4列目(Omega_m)を使ってグラフを描く
+    write (12, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
+    write (12, '(a)') 'set parametric'
+    write (12, '(a)') 'set trange [-0.05:1.05]'
+    write (12, '(a)') 'const = 3001'
+    ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
+    write (12, '(a)') 'set output "rk-step3.png"'
+    write (12, '(a)') 'replot const, t'
 ! 'rk-step3-save.plt'を閉じる
 close(12)
 
