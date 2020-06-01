@@ -72,7 +72,7 @@ open(11, file='rk-step3.plt', status='replace')
     write (11, '(a)') 'plot "rk-step3.dat" using 1:2 w l'
     write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l'
     write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
-    write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead'
+    write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead ds(10,5)'
     write (11, '(a)') 'set parametric'
     write (11, '(a)') 'set trange [-0.05:1.05]'
     write (11, '(a)') 'c1 = 1.0'
@@ -113,7 +113,7 @@ open(11, file='rk-step3-save.plt', status='replace')
     write (11, '(a)') 'set output "rk-step3.eps"'
     ! 1列目(1+z)と4列目(Omega_m)を使ってグラフを描く
     write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
-    write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead'
+    write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead ds(10,5)'
     write (11, '(a)') 'set parametric'
     write (11, '(a)') 'set trange [-0.05:1.05]'
     write (11, '(a)') 'c1 = 1'
