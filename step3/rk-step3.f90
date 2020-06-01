@@ -130,11 +130,13 @@ contains
         write (11, '(a)') 'set mytics 4'
         write (11, '(a)') 'set xrange [0.1:1000000]'
         write (11, '(a)') 'set yrange [-0.05:1.05]'
-        write (11, '(a)') 'set xlabel "1+z (= Exp(-N))"'
-        write (11, '(a)') 'set ylabel "Omega"'
+        write (11, '(a)') 'set xlabel "1+z  ( = e^{-N} )"'
+        write (11, '(a)') 'set ylabel "{/Symbol W}"'
         write (11, '(a)') 'set key invert' ! 凡例の上下を反転させる
         write (11, '(a)') 'set key outside'
         write (11, '(a)') 'set key box'
+        ! 凡例を「記号 文字」の順番にする
+        write (11, '(a)') 'set key reverse'
         write (11, '(a)') 'set size square'
     end subroutine
 
@@ -148,9 +150,9 @@ contains
         write (11, '(a)') 'plot c1, t lc "dark-gray" notitle'
         write (11, '(a)') 'replot c2, t lc "dark-gray" notitle'
         write (11, '(a)') 'replot t, c3 lc "dark-gray" notitle'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" title "Omega_r"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" title "Omega_m"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" title "Omega_{\lambda}"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" title "{/Symbol W}_r"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" title "{/Symbol W}_m"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" title "{/Symbol W}_{/Symbol L}"'
     end subroutine
 
     ! plotをepsに保存するための内部subroutine
@@ -169,12 +171,12 @@ contains
         write (11, '(a)') 'replot t, c3 lc "dark-gray" notitle'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" lw 2 title "Omega_r"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" lw 2 title "{/Symbol W}_r"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "Omega_m"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "{/Symbol W}_m"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" lw 2 title "Omega_{\lambda}"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" lw 2 title "{/Symbol W}_{/Symbol L}"'
     end subroutine
 end program main
