@@ -1,11 +1,13 @@
 # This repository is for assignment4 about Runge-Kutta method.
-Numerical calculation to understand the development of density parameters in Lambda-CDM model.
+Numerical calculation using Fortran90 to understand the development of density parameters in Lambda-CDM model.
 
 ## step1
 For single 1st-order ODE with an initial value
+![rk-step1](https://user-images.githubusercontent.com/64693735/83397954-6b639180-a439-11ea-85d0-7610cd6ee73b.png)
 
 ## step2
 For binary simultaneous 1st-order ODE with two initial values
+![rk-step2](https://user-images.githubusercontent.com/64693735/83398036-90580480-a439-11ea-8499-1cdc89e54ea2.png)
 
 ## step3
 For the assignment4 (with a set of boudary conditions)
