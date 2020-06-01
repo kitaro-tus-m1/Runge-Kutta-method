@@ -62,6 +62,9 @@ close(10)
 ! 'rk-step3.plt'を開く
 open(11, file='rk-step3.plt', status='replace')
     write (11, '(a)') 'set logscale x'
+    write (11, '(a)') 'set format x "10^{%L}"'
+    write (11, '(a)') 'set ytics 0.1'
+    write (11, '(a)') 'set mytics 4'
     write (11, '(a)') 'set xrange [0.1:1000000]'
     write (11, '(a)') 'set yrange [-0.05:1.05]'
     write (11, '(a)') 'set xlabel "1+z (= Exp(-N))"'
@@ -69,12 +72,14 @@ open(11, file='rk-step3.plt', status='replace')
     write (11, '(a)') 'plot "rk-step3.dat" using 1:2 w l'
     write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l'
     write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
+    write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead'
     write (11, '(a)') 'set parametric'
     write (11, '(a)') 'set trange [-0.05:1.05]'
-    write (11, '(a)') 'c1 = 1'
-    write (11, '(a)') 'c2 = 3001'
+    write (11, '(a)') 'c1 = 1.0'
+    write (11, '(a)') 'c2 = 3001.0'
     write (11, '(a)') 'replot c1, t'
     write (11, '(a)') 'replot c2, t'
+    ! write (11, '(a)') 'unset parametric'
 ! 'rk-step3.plt'を閉じる
 close(11)
 
@@ -84,35 +89,42 @@ call execute_command_line('gnuplot "rk-step3.plt"')
 
 ! 'rk-step3-save.plt'を作成してgnuplotでpng画像としてプロットを保存する
 ! 'rk-step3-save.plt'を開く
-open(12, file='rk-step3-save.plt', status='replace')
+open(11, file='rk-step3-save.plt', status='replace')
     ! 出力先をpngに設定
-    write (12, '(a)') 'set terminal png'
+    write (11, '(a)') 'set terminal postscript enhanced color'
     ! 出力ファイルを'rk-step1.png'に設定
-    write (12, '(a)') 'set output "rk-step3.png"'
+    write (11, '(a)') 'set output "rk-step3.eps'
     ! 横軸を対数軸に設定
-    write (12, '(a)') 'set logscale x'
-    write (12, '(a)') 'set xrange [0.1:1000000]'
-    write (12, '(a)') 'set yrange [-0.05:1.05]'
-    write (12, '(a)') 'set xlabel "1+z (= Exp(-N))"'
-    write (12, '(a)') 'set ylabel "Omega"'
+    write (11, '(a)') 'set logscale x'
+    write (11, '(a)') 'set format x "10^{%L}"'
+    write (11, '(a)') 'set ytics 0.1'
+    write (11, '(a)') 'set mytics 4'
+    write (11, '(a)') 'set xrange [0.1:1000000]'
+    write (11, '(a)') 'set yrange [-0.05:1.05]'
+    write (11, '(a)') 'set xlabel "1+z (= Exp(-N))"'
+    write (11, '(a)') 'set ylabel "Omega"'
     ! 'rk-step3.dat'をプロット
-    write (12, '(a)') 'plot "rk-step3.dat" using 1:2 w l'
+    write (11, '(a)') 'plot "rk-step3.dat" using 1:2 w l'
     ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
-    write (12, '(a)') 'set output "rk-step3.png"'
+    write (11, '(a)') 'set output "rk-step3.eps"'
     ! 1列目(1+z)と3列目(x(2))を使ってグラフを描く
-    write (12, '(a)') 'replot "rk-step3.dat" using 1:3 w l'
+    write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l'
     ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
-    write (12, '(a)') 'set output "rk-step3.png"'
+    write (11, '(a)') 'set output "rk-step3.eps"'
     ! 1列目(1+z)と4列目(Omega_m)を使ってグラフを描く
-    write (12, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
-    write (12, '(a)') 'set parametric'
-    write (12, '(a)') 'set trange [-0.05:1.05]'
-    write (12, '(a)') 'const = 3001'
+    write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l'
+    write (11, '(a)') 'set arrow from 0.1,0.68 to 1,0.68 nohead'
+    write (11, '(a)') 'set parametric'
+    write (11, '(a)') 'set trange [-0.05:1.05]'
+    write (11, '(a)') 'c1 = 1'
+    write (11, '(a)') 'c2 = 3001'
     ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
-    write (12, '(a)') 'set output "rk-step3.png"'
-    write (12, '(a)') 'replot const, t'
-! 'rk-step3-save.plt'を閉じる
-close(12)
+    write (11, '(a)') 'set output "rk-step3.eps"'
+    write (11, '(a)') 'replot c1, t'
+    write (11, '(a)') 'set output "rk-step3.eps"'
+    write (11, '(a)') 'replot c2, t'
+! 'rk-step3-1save.plt'を閉じる
+close(11)
 
 ! gnuplotを起動し，'rk-step3-save.plt'を実行する
 call execute_command_line('gnuplot "rk-step3-save.plt"')
