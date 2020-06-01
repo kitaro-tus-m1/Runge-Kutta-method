@@ -22,5 +22,3 @@ I have changed two initial values a lot of times to find the answer that satisfi
 The searching process is all by hand.
 
 I would like to automate it, however I have not yet come up with such a good idea.
-
-test private
