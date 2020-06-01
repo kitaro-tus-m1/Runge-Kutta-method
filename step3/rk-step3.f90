@@ -128,7 +128,7 @@ contains
         write (11, '(a)') 'set logscale x'
         write (11, '(a)') 'set format x "10^{%L}"'
         write (11, '(a)') 'set ytics 0.1'
-        write (11, '(a)') 'set mytics 4'
+        write (11, '(a)') 'set mytics 5'
         write (11, '(a)') 'set xrange [0.1:1000000]'
         write (11, '(a)') 'set yrange [-0.05:1.05]'
         write (11, '(a)') 'set xlabel "1+z  ( = e^{-N} )"'

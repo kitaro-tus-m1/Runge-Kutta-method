@@ -1,7 +1,7 @@
 set logscale x
 set format x "10^{%L}"
 set ytics 0.1
-set mytics 4
+set mytics 5
 set xrange [0.1:1000000]
 set yrange [-0.05:1.05]
 set xlabel "1+z  ( = e^{-N} )"
