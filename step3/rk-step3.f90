@@ -18,6 +18,7 @@ program main
     ! 1+z = 0.1 から計算を始めるためにt0は次のようにした
     double precision,parameter :: t0 = -Log(0.10d0), x0 = 0.000000015d0, y0 = 0.99955d0
     ! x0, y0 を色々と調節した
+    ! この調節をできれば自動化したかったが，いい方法が思いつかなかった
 
     ! 刻み幅h = -0.1とする
     double precision, parameter :: h = -0.1d0
@@ -132,11 +133,7 @@ contains
         write (11, '(a)') 'set yrange [-0.05:1.05]'
         write (11, '(a)') 'set xlabel "1+z  ( = e^{-N} )"'
         write (11, '(a)') 'set ylabel "{/Symbol W}"'
-        write (11, '(a)') 'set key invert' ! 凡例の上下を反転させる
-        write (11, '(a)') 'set key outside'
-        write (11, '(a)') 'set key box'
-        ! 凡例を「記号 文字」の順番にする
-        write (11, '(a)') 'set key reverse'
+        write (11, '(a)') 'set key outside invert reverse box Left width 2'
         write (11, '(a)') 'set size square'
     end subroutine
 

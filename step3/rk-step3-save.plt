@@ -8,10 +8,7 @@ set xrange [0.1:1000000]
 set yrange [-0.05:1.05]
 set xlabel "1+z  ( = e^{-N} )"
 set ylabel "{/Symbol W}"
-set key invert
-set key outside
-set key box
-set key reverse
+set key outside invert reverse box Left width 2
 set size square
 set parametric
 set trange [-0.05:1.05]
