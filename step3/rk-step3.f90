@@ -144,12 +144,12 @@ contains
         write (11, '(a)') 'c1 = 1.0'
         write (11, '(a)') 'c2 = 3001.0'
         write (11, '(a)') 'c3 = 0.68'
-        write (11, '(a)') 'plot c1, t title "z = 0"'
-        write (11, '(a)') 'replot c2, t title "z = 3000" '
-        write (11, '(a)') 'replot t, c3 title "Omega = 0.68"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l title "Omega_r"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l title "Omega_{\lambda}"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l title "Omega_m"'
+        write (11, '(a)') 'plot c1, t lc "dark-gray" notitle'
+        write (11, '(a)') 'replot c2, t lc "dark-gray" notitle'
+        write (11, '(a)') 'replot t, c3 lc "dark-gray" notitle'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" title "Omega_r"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" title "Omega_m"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" title "Omega_{\lambda}"'
     end subroutine
 
     ! plotをepsに保存するための内部subroutine
@@ -159,21 +159,21 @@ contains
         write (11, '(a)') 'c1 = 1.0'
         write (11, '(a)') 'c2 = 3001.0'
         write (11, '(a)') 'c3 = 0.68'
-        write (11, '(a)') 'plot c1, t title "z = 0"'
+        write (11, '(a)') 'plot c1, t lc "dark-gray" title "z = 0"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot c2, t title "z = 3000"'
+        write (11, '(a)') 'replot c2, t lc "dark-gray" title "z = 3000"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot t, c3 title "Omega = 0.68"'
+        write (11, '(a)') 'replot t, c3 lc "dark-gray" title "Omega = 0.68"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l title "Omega_r"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" lw 2 title "Omega_r"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l title "Omega_{\lambda}"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" lw 2 title "Omega_{\lambda}"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
-        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l title "Omega_m"'
+        write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "Omega_m"'
     end subroutine
 end program main
