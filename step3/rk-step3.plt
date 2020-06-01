@@ -15,9 +15,18 @@ set trange [-0.05:1.05]
 c1 = 1.0
 c2 = 3001.0
 c3 = 0.68
+<<<<<<< HEAD
 plot c1, t lc "dark-gray" title "z = 0"
 replot c2, t lc "dark-gray" title "z = 3000" 
 replot t, c3 lc "dark-gray" title "Omega = 0.68"
 replot "rk-step3.dat" using 1:2 w l title "Omega_r"
 replot "rk-step3.dat" using 1:4 w l title "Omega_m"
 replot "rk-step3.dat" using 1:3 w l title "Omega_{\lambda}"
+=======
+plot c1, t lc "dark-gray" notitle
+replot c2, t lc "dark-gray" notitle
+replot t, c3 lc "dark-gray" notitle
+replot "rk-step3.dat" using 1:2 w l lt rgb "blue" title "Omega_r"
+replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" title "Omega_m"
+replot "rk-step3.dat" using 1:3 w l lt rgb "red" title "Omega_{\lambda}"
+>>>>>>> step3
