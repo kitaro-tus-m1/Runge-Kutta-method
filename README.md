@@ -15,7 +15,7 @@ For binary simultaneous 1st-order ODE with two initial values
 For the assignment4 (with a set of boudary conditions)
 
 ### result
-[rk-step3.pdf](https://github.com/kitaro-tus-m1/Runge-Kutta-method/files/4710701/rk-step3.pdf)
+![rk-step3](https://user-images.githubusercontent.com/64693735/83399544-5dfbd680-a43c-11ea-9caa-a2c044e131f3.png)
 
 I have changed two initial values a lot of times to find the answer that satisfies the conditions.
 
