@@ -17,22 +17,14 @@ set trange [-0.05:1.05]
 c1 = 1.0
 c2 = 3001.0
 c3 = 0.68
-plot c1, t lc "dark-gray" title "z = 0"
+plot c1, t lc "dark-gray" notitle
 set output "rk-step3.eps"
-replot c2, t lc "dark-gray" title "z = 3000"
+replot c2, t lc "dark-gray" notitle
 set output "rk-step3.eps"
-replot t, c3 lc "dark-gray" title "Omega = 0.68"
+replot t, c3 lc "dark-gray" notitle
 set output "rk-step3.eps"
-<<<<<<< HEAD
-replot "rk-step3.dat" using 1:2 w l lw 2 title "Omega_r"
-set output "rk-step3.eps"
-replot "rk-step3.dat" using 1:4 w l lw 2 title "Omega_m"
-set output "rk-step3.eps"
-replot "rk-step3.dat" using 1:3 w l lw 2 title "Omega_{\lambda}"
-=======
 replot "rk-step3.dat" using 1:2 w l lt rgb "blue" lw 2 title "Omega_r"
 set output "rk-step3.eps"
-replot "rk-step3.dat" using 1:3 w l lt rgb "red" lw 2 title "Omega_{\lambda}"
-set output "rk-step3.eps"
 replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "Omega_m"
->>>>>>> step3
+set output "rk-step3.eps"
+replot "rk-step3.dat" using 1:3 w l lt rgb "red" lw 2 title "Omega_{\lambda}"
