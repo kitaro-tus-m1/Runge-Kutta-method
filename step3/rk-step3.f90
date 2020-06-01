@@ -172,7 +172,7 @@ contains
         ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
         write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "{/Symbol W}_m"'
-        ! グラフを重ねるため再度，出力ファイルを'rk-step3.png'に設定
+        ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
         write (11, '(a)') 'set output "rk-step3.eps"'
         write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" lw 2 title "{/Symbol W}_{/Symbol L}"'
     end subroutine
