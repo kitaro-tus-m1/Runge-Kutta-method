@@ -34,29 +34,21 @@ program main
     
         ! 繰り返し処理のためのiを定義する
         integer i
-        ! Runge-Kutta method の各kを2要素配列として定義する
-        double precision k1(2), k2(2), k3(2), k4(2)
     
     
     !-------------------------------------------------------------
     !----- 2. Runge-Kutta method ---------------------------------
     !-------------------------------------------------------------
     
-    ! 'rk-step4.dat'を開く
     open(10, file='rk-step4.dat', status='replace')
         ! 初期値を画面に表示
         print *, Exp(-t), x, 1.0d0 - x(1) - x(2)
         ! 初期値を'rk-step4.dat'に出力
         write(10, '(3e17.9)') Exp(-t), x, 1.0d0 - x(1) - x(2)
-    
-        ! Runge-Kutta methodの繰り返し処理を書く
+
+        ! Runge-Kutta の繰り返し
         do i = 1, 180
-            k1 = h * f(t, x)
-            k2 = h * f(t+h/2.0, x+k1/2.0)
-            k3 = h * f(t+h/2.0, x+k2/2.0)
-            k4 = h * f(t+h, x+k3)
-            t = t + h
-            x = x + (k1 + 2*k2 + 2*k3 + k4)/6.0
+            call runge_kutta(t, x, h)
             ! 計算結果を画面に表示
             print '(4e17.9)', Exp(-t), x, 1.0d0 - x(1) - x(2)
             ! 計算結果を'rk-step4.dat'に出力
@@ -64,7 +56,6 @@ program main
         end do
     ! 'rk-step4.dat'を閉じる
     close(10)
-    
     
     !-------------------------------------------------------------
     !----- 3. 結果を画面に表示 --------------------------------------
@@ -125,6 +116,18 @@ program main
             return
         end function f
     
+        ! Runge-Kutta method を行う内部副サブルーチンを定義する
+        subroutine runge_kutta(t, x, h)
+            ! Runge-Kutta method の各kを2要素配列として定義する
+            double precision k1(2), k2(2), k3(2), k4(2), t, x(2), h
+            k1 = h * f(t, x)
+            k2 = h * f(t+h/2.0, x+k1/2.0)
+            k3 = h * f(t+h/2.0, x+k2/2.0)
+            k4 = h * f(t+h, x+k3)
+            t = t + h
+            x = x + (k1 + 2*k2 + 2*k3 + k4)/6.0
+        end subroutine
+
         ! gnuplotの設定を行う内部subroutine
         subroutine set_gnuplot_options
             write (11, '(a)') 'set logscale x'
