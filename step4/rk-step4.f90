@@ -1,5 +1,7 @@
-! \Lambda-CDM modelにおける密度パラメータの時間変化をRUnge-Kutta methodで求める
+! \Lambda-CDM modelにおける密度パラメータの時間変化をRunge-Kutta methodで求める
 program main
+
+! runge_kutta という subroutine を定義してリファクタリングする
 
     !-------------------------------------------------------------
     !----- 1. 変数定数 定義 ----------------------------------------
@@ -40,11 +42,11 @@ program main
     !----- 2. Runge-Kutta method ---------------------------------
     !-------------------------------------------------------------
     
-    ! 'rk-step3.dat'を開く
-    open(10, file='rk-step3.dat', status='replace')
+    ! 'rk-step4.dat'を開く
+    open(10, file='rk-step4.dat', status='replace')
         ! 初期値を画面に表示
         print *, Exp(-t), x, 1.0d0 - x(1) - x(2)
-        ! 初期値を'rk-step3.dat'に出力
+        ! 初期値を'rk-step4.dat'に出力
         write(10, '(3e17.9)') Exp(-t), x, 1.0d0 - x(1) - x(2)
     
         ! Runge-Kutta methodの繰り返し処理を書く
@@ -57,10 +59,10 @@ program main
             x = x + (k1 + 2*k2 + 2*k3 + k4)/6.0
             ! 計算結果を画面に表示
             print '(4e17.9)', Exp(-t), x, 1.0d0 - x(1) - x(2)
-            ! 計算結果を'rk-step3.dat'に出力
+            ! 計算結果を'rk-step4.dat'に出力
             write(10, '(4e17.9)') Exp(-t), x, 1.0d0 - x(1) - x(2)
         end do
-    ! 'rk-step3.dat'を閉じる
+    ! 'rk-step4.dat'を閉じる
     close(10)
     
     
@@ -68,42 +70,42 @@ program main
     !----- 3. 結果を画面に表示 --------------------------------------
     !-------------------------------------------------------------
     
-    ! 'rk-step3.plt'を作成してgnuplotでAqauaTermによるプロットを画面に表示させる
-    ! 'rk-step3.plt'を開く
-    open(11, file='rk-step3.plt', status='replace')
+    ! 'rk-step4.plt'を作成してgnuplotでAqauaTermによるプロットを画面に表示させる
+    ! 'rk-step4.plt'を開く
+    open(11, file='rk-step4.plt', status='replace')
         ! 内部subroutine 'set_gnuplot_options' を呼び出しgnuplotの設定をする
         call set_gnuplot_options
         ! 内部subroutine 'gnuplot_plot_screen' を呼び出し，グラフを画面に表示する
         call gnuplot_plot_screen
-    ! 'rk-step3.plt'を閉じる
+    ! 'rk-step4.plt'を閉じる
     close(11)
     
-    ! gnuplotを起動し，'rk-step3.plt'を実行する
-    call execute_command_line('gnuplot "rk-step3.plt"')
+    ! gnuplotを起動し，'rk-step4.plt'を実行する
+    call execute_command_line('gnuplot "rk-step4.plt"')
     
     
     !-------------------------------------------------------------
     !----- 4. 結果をeps画像として保存 -------------------------------
     !-------------------------------------------------------------
     
-    ! 'rk-step3-save.plt'を作成してgnuplotでeps画像としてプロットを保存する
-    ! 'rk-step3-save.plt'を開く
-    open(11, file='rk-step3-save.plt', status='replace')
+    ! 'rk-step4-save.plt'を作成してgnuplotでeps画像としてプロットを保存する
+    ! 'rk-step4-save.plt'を開く
+    open(11, file='rk-step4-save.plt', status='replace')
         ! 出力先をeps(color)に設定
         write (11, '(a)') 'set terminal postscript enhanced color'
-        ! 出力ファイルを'rk-step3.eps'に設定
-        write (11, '(a)') 'set output "rk-step3.eps'
+        ! 出力ファイルを'rk-step4.eps'に設定
+        write (11, '(a)') 'set output "rk-step4.eps'
     
         ! gnuplotの設定
         call set_gnuplot_options
         ! 内部subroutine 'gnuplot_plot_output' を呼び出し，グラフをepsに出力保存する
         call gnuplot_plot_eps
     
-    ! 'rk-step3-1save.plt'を閉じる
+    ! 'rk-step4-1save.plt'を閉じる
     close(11)
     
-    ! gnuplotを起動し，'rk-step3-save.plt'を実行する
-    call execute_command_line('gnuplot "rk-step3-save.plt"')
+    ! gnuplotを起動し，'rk-step4-save.plt'を実行する
+    call execute_command_line('gnuplot "rk-step4-save.plt"')
     
     stop
     
@@ -147,9 +149,9 @@ program main
             write (11, '(a)') 'plot c1, t lc "dark-gray" notitle'
             write (11, '(a)') 'replot c2, t lc "dark-gray" notitle'
             write (11, '(a)') 'replot t, c3 lc "dark-gray" notitle'
-            write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" title "{/Symbol W}_r"'
-            write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" title "{/Symbol W}_m"'
-            write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" title "{/Symbol W}_{/Symbol L}"'
+            write (11, '(a)') 'replot "rk-step4.dat" using 1:2 w l lt rgb "blue" title "{/Symbol W}_r"'
+            write (11, '(a)') 'replot "rk-step4.dat" using 1:4 w l lt rgb "dark-green" title "{/Symbol W}_m"'
+            write (11, '(a)') 'replot "rk-step4.dat" using 1:3 w l lt rgb "red" title "{/Symbol W}_{/Symbol L}"'
         end subroutine
     
         ! plotをepsに保存するための内部subroutine
@@ -160,20 +162,20 @@ program main
             write (11, '(a)') 'c2 = 3001.0'
             write (11, '(a)') 'c3 = 0.68'
             write (11, '(a)') 'plot c1, t lc "dark-gray" notitle'
-            ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
-            write (11, '(a)') 'set output "rk-step3.eps"'
+            ! グラフを重ねるため再度，出力ファイルを'rk-step4.eps'に設定
+            write (11, '(a)') 'set output "rk-step4.eps"'
             write (11, '(a)') 'replot c2, t lc "dark-gray" notitle'
-            ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
-            write (11, '(a)') 'set output "rk-step3.eps"'
+            ! グラフを重ねるため再度，出力ファイルを'rk-step4.eps'に設定
+            write (11, '(a)') 'set output "rk-step4.eps"'
             write (11, '(a)') 'replot t, c3 lc "dark-gray" notitle'
-            ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
-            write (11, '(a)') 'set output "rk-step3.eps"'
-            write (11, '(a)') 'replot "rk-step3.dat" using 1:2 w l lt rgb "blue" lw 2 title "{/Symbol W}_r"'
-            ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
-            write (11, '(a)') 'set output "rk-step3.eps"'
-            write (11, '(a)') 'replot "rk-step3.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "{/Symbol W}_m"'
-            ! グラフを重ねるため再度，出力ファイルを'rk-step3.eps'に設定
-            write (11, '(a)') 'set output "rk-step3.eps"'
-            write (11, '(a)') 'replot "rk-step3.dat" using 1:3 w l lt rgb "red" lw 2 title "{/Symbol W}_{/Symbol L}"'
+            ! グラフを重ねるため再度，出力ファイルを'rk-step4.eps'に設定
+            write (11, '(a)') 'set output "rk-step4.eps"'
+            write (11, '(a)') 'replot "rk-step4.dat" using 1:2 w l lt rgb "blue" lw 2 title "{/Symbol W}_r"'
+            ! グラフを重ねるため再度，出力ファイルを'rk-step4.eps'に設定
+            write (11, '(a)') 'set output "rk-step4.eps"'
+            write (11, '(a)') 'replot "rk-step4.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "{/Symbol W}_m"'
+            ! グラフを重ねるため再度，出力ファイルを'rk-step4.eps'に設定
+            write (11, '(a)') 'set output "rk-step4.eps"'
+            write (11, '(a)') 'replot "rk-step4.dat" using 1:3 w l lt rgb "red" lw 2 title "{/Symbol W}_{/Symbol L}"'
         end subroutine
     end program main
