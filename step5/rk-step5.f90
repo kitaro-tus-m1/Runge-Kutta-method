@@ -6,17 +6,7 @@ program main
 !-------------------------------------------------------------
     implicit none
     ! 表記を簡単にするため，x := \Omega_r, y := \Omega_{\lambda}, N := N とする
-    ! 解く方程式は x'(t) = x (x - 3y - 1) =: f(x, y), y'(t) = y (x - 3y + 3) =: g(x, y)
-    ! 初期値は x(0) = unknown, y(0) = 0.68
-    ! 境界条件は y(-Ln(3001)) = 1 - 2 x(-Ln(3001))
-    ! x(0)がunknownなので，x(0)を色々と仮定して解いてみる
-    ! その試行の中で，境界条件を満たすものが現れたら，それが解であるとみなす
-    
-    ! x0, y0 を色々と調節した
-    ! この調節をできれば自動化したかったが，いい方法が思いつかなかった
-    
-    ! 繰り返し処理のためのiを定義する
-    integer i
+    ! 解く方程式は x'(t) = x (x - 3y - 1) =: f(x, y), y'(t) = y (x - 3y + 3) =: g(x, y)    
     
 ! 0. 前準備
     ! 初期値としてN=0, Omega_r=0.9995D0（適当な大きな値）,
@@ -24,16 +14,13 @@ program main
     ! 設定し，漸近的過去から計算をスタートします．
     double precision :: N = 0.0d0
     double precision N0 !あとで使う
-    double precision, parameter :: x0 = 0.9995d0, y0 = 1.0d-20
+    double precision, parameter :: x0 = 0.9967d0, y0 = 1.0d-20
     double precision x(2)
     data x /x0, y0/
-    ! 刻み幅h = 0.1とする
     double precision, parameter :: h = 1.0d-3
-    ! 微小量の閾値を定義する
-    ! このepsより小さい量はゼロとみなす
-    double precision, parameter :: eps = 1.0d-10
-
-    ! print *, h
+    ! 微小量の閾値を定義し，これより小さい量はゼロとみなす
+    ! double precision, parameter :: eps = 1.0d-10
+    ! うまくいかない
 
 ! 1. 1ループ目
     ! RK4法を用いて積分を行い， Omega_{Lambda}=0.68になった
@@ -41,29 +28,75 @@ program main
     ! なお，このループではデータを出力しません．
 
     do while ( x(2) < 0.68d0 )
+        ! abs(x(2)-0.68d0) > eps という条件でやってみるとなぜかうまくいかない
         call runge_kutta(N, x, h)
         ! print *, N, x
     end do
     N0 = N
-    ! print *, N0, x
 
 ! 2. 2ループ目
     ! 初期値としてN= - N0と置き直し，Omega_rとOmega_{Lambda}
     ! については1ループ目と同じ初期値を用います．このようにすると，
     ! Omega_{Lambda}=0.68になった時に自動的にN=0（z=0）となります．
     N = -N0
-    !print *, N
     x(1) = x0
     x(2) = y0
-    !print *, x
-    ! print *, N, x
+
+open(10, file='rk-step5.dat', status='replace')
+    ! 初期値を画面に表示
+    print *, Exp(-N), x, 1.0d0 - x(1) - x(2)
+    ! 初期値を'rk-step5.dat'に出力
+    write(10, '(3e17.9)') Exp(-N), x, 1.0d0 - x(1) - x(2)
+
+    ! (1+z)=0.1 まで繰り返す
     do while ( N < -Log(0.10d0) )
         call runge_kutta(N, x, h)
-        print *, N, x
+        ! 計算結果を画面に表示
+        print '(4e17.9)', Exp(-N), x, 1.0d0 - x(1) - x(2)
+        ! 計算結果を'rk-step5.dat'に出力
+        write(10, '(4e17.9)') Exp(-N), x, 1.0d0 - x(1) - x(2)
     end do
+close(10)
 
-! 3. radiation-matter equality の検証
-    
+!-------------------------------------------------------------
+!----- 3. 結果を画面に表示 --------------------------------------
+!-------------------------------------------------------------
+
+! 'rk-step5.plt'を作成してgnuplotでAqauaTermによるプロットを画面に表示させる
+! 'rk-step5.plt'を開く
+open(11, file='rk-step5.plt', status='replace')
+    ! 内部subroutine 'set_gnuplot_options' を呼び出しgnuplotの設定をする
+    call set_gnuplot_options
+    ! 内部subroutine 'gnuplot_plot_screen' を呼び出し，グラフを画面に表示する
+    call gnuplot_plot_screen
+! 'rk-step5.plt'を閉じる
+close(11)
+
+! gnuplotを起動し，'rk-step5.plt'を実行する
+call execute_command_line('gnuplot "rk-step5.plt"')
+
+!-------------------------------------------------------------
+!----- 4. 結果をeps画像として保存 -------------------------------
+!-------------------------------------------------------------
+
+! 'rk-step5-save.plt'を作成してgnuplotでeps画像としてプロットを保存する
+! 'rk-step5-save.plt'を開く
+open(11, file='rk-step5-save.plt', status='replace')
+    ! 出力先をeps(color)に設定
+    write (11, '(a)') 'set terminal postscript enhanced color'
+    ! 出力ファイルを'rk-step5.eps'に設定
+    write (11, '(a)') 'set output "rk-step5.eps'
+
+    ! gnuplotの設定
+    call set_gnuplot_options
+    ! 内部subroutine 'gnuplot_plot_output' を呼び出し，グラフをepsに出力保存する
+    call gnuplot_plot_eps
+
+! 'rk-step5-1save.plt'を閉じる
+close(11)
+
+! gnuplotを起動し，'rk-step5-save.plt'を実行する
+call execute_command_line('gnuplot "rk-step5-save.plt"')
 
 stop
 
