@@ -20,6 +20,7 @@ program main
     ! double precision, parameter :: eps = 1.0d-10
     ! うまくいかない
 
+    ! 漸近的過去でN=0とした場合の現在のNの値を求めるサブルーチン
     call get_N0(N, x, h)
     N0 = N
 
@@ -180,6 +181,31 @@ contains
         write (11, '(a)') 'replot "rk-step5.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "{/Symbol W}_m"'
         ! グラフを重ねるため再度，出力ファイルを'rk-step5.eps'に設定
         write (11, '(a)') 'set output "rk-step5.eps"'
+        write (11, '(a)') 'replot "rk-step5.dat" using 1:3 w l lt rgb "red" lw 2 title "{/Symbol W}_{/Symbol L}"'
+    end subroutine
+
+    ! plotをpngに保存するための内部subroutine
+    subroutine gnuplot_plot_png
+        write (11, '(a)') 'set parametric'
+        write (11, '(a)') 'set trange [-0.05:1.05]'
+        write (11, '(a)') 'c1 = 1.0'
+        write (11, '(a)') 'c2 = 3001.0'
+        write (11, '(a)') 'c3 = 0.68'
+        write (11, '(a)') 'plot c1, t lc "dark-gray" notitle'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step5.png'に設定
+        write (11, '(a)') 'set output "rk-step5.png"'
+        write (11, '(a)') 'replot c2, t lc "dark-gray" notitle'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step5.png'に設定
+        write (11, '(a)') 'set output "rk-step5.png"'
+        write (11, '(a)') 'replot t, c3 lc "dark-gray" notitle'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step5.png'に設定
+        write (11, '(a)') 'set output "rk-step5.png"'
+        write (11, '(a)') 'replot "rk-step5.dat" using 1:2 w l lt rgb "blue" lw 2 title "{/Symbol W}_r"'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step5.png'に設定
+        write (11, '(a)') 'set output "rk-step5.png"'
+        write (11, '(a)') 'replot "rk-step5.dat" using 1:4 w l lt rgb "dark-green" lw 2 title "{/Symbol W}_m"'
+        ! グラフを重ねるため再度，出力ファイルを'rk-step5.png'に設定
+        write (11, '(a)') 'set output "rk-step5.png"'
         write (11, '(a)') 'replot "rk-step5.dat" using 1:3 w l lt rgb "red" lw 2 title "{/Symbol W}_{/Symbol L}"'
     end subroutine
 end program main
