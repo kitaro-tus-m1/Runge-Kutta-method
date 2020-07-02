@@ -5,9 +5,7 @@ program main
 !----- 1. 変数定数 定義 ----------------------------------------
 !-------------------------------------------------------------
     implicit none
-    ! 表記を簡単にするため，x := \Omega_r, y := \Omega_{\lambda}, N := N とする
-    ! 解く方程式は x'(t) = x (x - 3y - 1) =: f(x, y), y'(t) = y (x - 3y + 3) =: g(x, y)    
-    
+    ! 表記を簡単にするため，x := \Omega_r, y := \Omega_{\lambda}, N := N とする    
 ! 0. 前準備
     ! 初期値としてN=0, Omega_r=0.9995D0（適当な大きな値）,
     ! Omega_{Lambda}=1.0D-20（適当な小さな値）を事前に
@@ -22,16 +20,7 @@ program main
     ! double precision, parameter :: eps = 1.0d-10
     ! うまくいかない
 
-! 1. 1ループ目
-    ! RK4法を用いて積分を行い， Omega_{Lambda}=0.68になった
-    ! 時点で計算を止めます．この時のNの値をN0とおきます．
-    ! なお，このループではデータを出力しません．
-
-    do while ( x(2) < 0.68d0 )
-        ! abs(x(2)-0.68d0) > eps という条件でやってみるとなぜかうまくいかない
-        call runge_kutta(N, x, h)
-        ! print *, N, x
-    end do
+    call get_N0(N, x, h)
     N0 = N
 
 ! 2. 2ループ目
@@ -126,6 +115,18 @@ contains
         k4 = h * f(t+h, x+k3)
         t = t + h
         x = x + (k1 + 2*k2 + 2*k3 + k4)/6.0
+    end subroutine
+
+    ! 漸近的過去をN=0とした時の現在のNの値を求める
+    subroutine get_N0(N, x, h)
+        implicit none
+
+        double precision N, h
+        double precision x(2)
+    
+        do while ( x(2) < 0.68d0 )
+            call runge_kutta(N, x, h)
+        end do
     end subroutine
 
     ! gnuplotの設定を行う内部subroutine
