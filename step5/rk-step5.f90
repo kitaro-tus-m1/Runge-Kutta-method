@@ -39,20 +39,6 @@ program main
     ! RK4法を用いて積分を行い， Omega_{Lambda}=0.68になった
     ! 時点で計算を止めます．この時のNの値をN0とおきます．
     ! なお，このループではデータを出力しません．
-    
-    ! print *, N, x
-    !print *, abs(x(2)-0.68d0)
-    !if (abs(x(2)-0.68d0) > eps ) then
-    !    print *, "ok"
-    !end if 
-    !x(2) = 0.681
-    !print *, x(2)
-    !if (abs(x(2)-0.68d0) > eps ) then
-    !    print *, "ok"
-    !else
-    !    print *, "not good"
-    !    print *, x(2) - 0.68d0
-    !end if 
 
     do while ( x(2) < 0.68d0 )
         call runge_kutta(N, x, h)
